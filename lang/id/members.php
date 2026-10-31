@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'title' => 'Anggota',
+    'subtitle' => 'Kelola siapa saja yang bekerja pada proyek ini.',
+    'add' => 'Tambah anggota',
+    'add_title' => 'Tambah anggota proyek',
+    'add_hint' => 'Anggota baru ditambahkan dengan peran Anggota.',
+    'select_user' => 'Pilih pengguna',
+    'select_user_placeholder' => 'Pilih pengguna yang belum bergabung',
+    'role' => 'Peran',
+    'change_role' => 'Ubah peran',
+    'remove' => 'Keluarkan',
+    'remove_title' => 'Keluarkan anggota?',
+    'remove_body' => '":name" akan dikeluarkan dari proyek. Semua task yang ditugaskan kepadanya di proyek ini menjadi belum ditugaskan.',
+    'remove_confirm' => 'Keluarkan anggota',
+    'added' => 'Anggota ditambahkan.',
+    'role_updated' => 'Peran anggota diperbarui.',
+    'removed' => 'Anggota dikeluarkan. Task terkait menjadi belum ditugaskan.',
+    'manager_protected' => 'Manajer proyek tidak dapat dikeluarkan atau diturunkan perannya.',
+    'already_member' => 'Pengguna ini sudah menjadi anggota proyek.',
+    'not_member' => 'Pengguna ini bukan anggota proyek.',
+    'empty_title' => 'Belum ada anggota lain',
+    'empty_body' => 'Tambahkan anggota tim agar pekerjaan bisa dibagi.',
+    'no_eligible_users' => 'Semua pengguna sudah bergabung di proyek ini.',
+    'manager_hint' => 'Manajer dilindungi dan tidak dapat dikeluarkan.',
+];

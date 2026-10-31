@@ -1,0 +1,138 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+:root {
+    --canvas: #f4f6fa;
+    --surface: #ffffff;
+    --line: #e3e7ee;
+    --content: #172033;
+    --content-muted: #5f6b82;
+    --brand: #3347c8;
+    --brand-hover: #283aa3;
+    --brand-soft: #e6e9fb;
+    --brand-text: #3347c8;
+    --danger: #c62f3e;
+    --warning: #c48a00;
+    --success: #1b7a4b;
+    --info: #0b6e8a;
+
+    --status-todo: #5f6b82;
+    --status-todo-soft: #eef1f6;
+    --status-in-progress: #0b6e8a;
+    --status-in-progress-soft: #ddf3f9;
+    --status-in-review: #6a47b8;
+    --status-in-review-soft: #ede7fa;
+    --status-completed: #1b7a4b;
+    --status-completed-soft: #def4e7;
+
+    --priority-low: #8792a6;
+    --priority-medium: #c48a00;
+    --priority-high: #d9601a;
+    --priority-urgent: #c62f3e;
+}
+
+.dark {
+    --canvas: #0e1424;
+    --surface: #161e33;
+    --line: #27324d;
+    --content: #e7ebf4;
+    --content-muted: #9aa6bf;
+    --brand: #4a5ce0;
+    --brand-hover: #6171f0;
+    --brand-soft: #222b55;
+    --brand-text: #a5b1ff;
+    --danger: #f0616d;
+    --warning: #e0a82e;
+    --success: #5fd39a;
+    --info: #5cc8e3;
+
+    --status-todo: #aab4c8;
+    --status-todo-soft: #232c44;
+    --status-in-progress: #5cc8e3;
+    --status-in-progress-soft: #12313d;
+    --status-in-review: #b79df2;
+    --status-in-review-soft: #2a2347;
+    --status-completed: #5fd39a;
+    --status-completed-soft: #12332a;
+
+    --priority-medium: #e0a82e;
+    --priority-high: #f08a4b;
+    --priority-urgent: #f0616d;
+}
+
+@theme inline {
+    --color-canvas: var(--canvas);
+    --color-surface: var(--surface);
+    --color-line: var(--line);
+    --color-content: var(--content);
+    --color-content-muted: var(--content-muted);
+    --color-brand: var(--brand);
+    --color-brand-hover: var(--brand-hover);
+    --color-brand-soft: var(--brand-soft);
+    --color-brand-text: var(--brand-text);
+    --color-danger: var(--danger);
+    --color-warning: var(--warning);
+    --color-success: var(--success);
+    --color-info: var(--info);
+
+    --color-status-todo: var(--status-todo);
+    --color-status-todo-soft: var(--status-todo-soft);
+    --color-status-in-progress: var(--status-in-progress);
+    --color-status-in-progress-soft: var(--status-in-progress-soft);
+    --color-status-in-review: var(--status-in-review);
+    --color-status-in-review-soft: var(--status-in-review-soft);
+    --color-status-completed: var(--status-completed);
+    --color-status-completed-soft: var(--status-completed-soft);
+
+    --color-priority-low: var(--priority-low);
+    --color-priority-medium: var(--priority-medium);
+    --color-priority-high: var(--priority-high);
+    --color-priority-urgent: var(--priority-urgent);
+
+    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+    --radius-control: 6px;
+    --radius-card: 10px;
+    --radius-overlay: 14px;
+
+    --shadow-card: 0 1px 2px rgb(23 32 51 / 0.06);
+    --shadow-raised: 0 6px 20px -6px rgb(23 32 51 / 0.18);
+    --shadow-overlay: 0 16px 40px -12px rgb(23 32 51 / 0.28);
+}
+
+@layer base {
+    html {
+        color-scheme: light;
+    }
+
+    html.dark {
+        color-scheme: dark;
+    }
+
+    body {
+        @apply bg-canvas text-content font-sans antialiased;
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--brand);
+        outline-offset: 2px;
+    }
+}
+
+[x-cloak] {
+    display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
