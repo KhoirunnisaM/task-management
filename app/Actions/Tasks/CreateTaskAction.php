@@ -3,6 +3,8 @@
 namespace App\Actions\Tasks;
 
 use App\Enums\TaskStatus;
+use App\Events\TaskAssigned;
+use App\Events\TaskCreated;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\User;
@@ -13,7 +15,7 @@ final class CreateTaskAction
 {
     public function execute(Project $project, array $data, User $creator): Task
     {
-        return DB::transaction(function () use ($project, $data, $creator) {
+        $task = DB::transaction(function () use ($project, $data, $creator) {
             $maxPosition = $project->tasks()
                 ->where('status', TaskStatus::Todo->value)
                 ->max('position');
@@ -26,5 +28,17 @@ final class CreateTaskAction
                 'position' => $maxPosition === null ? 0 : ((int) $maxPosition + 1),
             ]);
         });
+
+        TaskCreated::dispatch($project, $task, $creator);
+
+        if ($task->assigned_to !== null) {
+            $assignee = User::query()->find($task->assigned_to, ['id', 'name']);
+
+            if ($assignee !== null) {
+                TaskAssigned::dispatch($task, null, $assignee, $creator);
+            }
+        }
+
+        return $task;
     }
 }

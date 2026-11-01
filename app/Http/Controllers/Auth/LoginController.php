@@ -21,7 +21,7 @@ class LoginController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('projects.index'))
+        return redirect()->intended(route('dashboard'))
             ->with('success', __('auth.logged_in'));
     }
 

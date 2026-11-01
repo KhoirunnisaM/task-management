@@ -14,18 +14,20 @@ Alpine.data('kanbanColumn', ({ status }) => ({
             group: 'kanban',
             animation: 180,
             draggable: '[data-draggable="true"]',
-            filter: 'a, button, input, select, textarea',
+            filter: 'button, input, select, textarea',
             preventOnFilter: false,
-            ghostClass: 'opacity-40',
-            dragClass: 'rotate-1',
+            ghostClass: 'opacity-30',
+            dragClass: 'rotate-[1.5deg] opacity-95 shadow-raised',
             onEnd: (event) => {
                 if (event.from === event.to && event.oldIndex === event.newIndex) {
                     return;
                 }
 
+                const targetStatus = event.to.dataset.status ?? status;
+
                 this.$wire.moveTask(
                     Number(event.item.dataset.taskId),
-                    status,
+                    targetStatus,
                     event.newIndex,
                 );
             },

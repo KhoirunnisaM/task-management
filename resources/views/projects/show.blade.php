@@ -269,27 +269,11 @@
         <section x-show="tab === 'activity'" x-cloak class="mt-6">
             <h2 class="text-lg font-semibold tracking-tight">{{ __('projects.activity') }}</h2>
 
-            @if ($project->activityLogs->isEmpty())
-                <x-ui.empty-state class="mt-3" :title="__('projects.activity_empty')" :body="__('projects.activity_empty_body')" />
-            @else
-                <ol class="mt-3 divide-y divide-line rounded-card border border-line bg-surface">
-                    @foreach ($project->activityLogs as $log)
-                        <li class="flex items-start gap-3 p-4">
-                            <x-ui.avatar :user="$log->user" size="md" />
-                            <div class="min-w-0 flex-1">
-                                <p class="text-sm text-content">
-                                    <span class="font-medium">{{ $log->user?->name ?? __('common.not_set') }}</span>
-                                    {{ __('activity.actions.'.$log->action) }}
-                                    @if (isset($log->properties['title']))
-                                        <span class="font-medium">“{{ $log->properties['title'] }}”</span>
-                                    @endif
-                                </p>
-                                <p class="mt-0.5 text-xs text-content-muted">{{ $log->created_at?->diffForHumans() }}</p>
-                            </div>
-                        </li>
-                    @endforeach
-                </ol>
-            @endif
+            <x-activity.timeline
+                :logs="$project->activityLogs"
+                :empty-title="__('projects.activity_empty')"
+                :empty-body="__('projects.activity_empty_body')"
+            />
         </section>
     </div>
 @endsection

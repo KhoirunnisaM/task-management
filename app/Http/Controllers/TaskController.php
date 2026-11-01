@@ -68,7 +68,17 @@ class TaskController extends Controller
     public function show(Project $project, Task $task): View
     {
         $this->authorize('view', $task);
-        $task->load(['assignee:id,name', 'creator:id,name']);
+        $task->load([
+            'assignee:id,name',
+            'creator:id,name',
+            'comments' => fn ($comments) => $comments
+                ->with('user:id,name')
+                ->oldest(),
+            'activityLogs' => fn ($logs) => $logs
+                ->with('user:id,name')
+                ->latest()
+                ->limit(30),
+        ]);
 
         return view('tasks.show', [
             'project' => $project,
@@ -95,7 +105,7 @@ class TaskController extends Controller
         Task $task,
         UpdateTaskAction $action,
     ): RedirectResponse {
-        $action->execute($task, $request->validated());
+        $action->execute($task, $request->validated(), $request->user());
 
         return redirect()->route('projects.tasks.show', [$project, $task])
             ->with('success', __('tasks.updated'));
@@ -120,7 +130,11 @@ class TaskController extends Controller
         Task $task,
         UpdateTaskStatusAction $action,
     ): RedirectResponse {
-        $action->execute($task, TaskStatus::from($request->validated('status')));
+        $action->execute(
+            $task,
+            TaskStatus::from($request->validated('status')),
+            actor: $request->user(),
+        );
 
         return back()->with('success', __('tasks.status_updated'));
     }

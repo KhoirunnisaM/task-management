@@ -3,15 +3,22 @@
 namespace App\Actions\Tasks;
 
 use App\Enums\TaskStatus;
+use App\Events\TaskStatusChanged;
 use App\Models\Task;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 final class UpdateTaskStatusAction
 {
-    public function execute(Task $task, TaskStatus $status, ?int $position = null): Task
-    {
-        return DB::transaction(function () use ($task, $status, $position) {
-            $previousStatus = $task->status;
+    public function execute(
+        Task $task,
+        TaskStatus $status,
+        ?int $position = null,
+        ?User $actor = null,
+    ): Task {
+        $previousStatus = $task->status;
+
+        $task = DB::transaction(function () use ($task, $status, $position, $previousStatus) {
             $completedAt = $status === TaskStatus::Completed
                 ? ($task->completed_at ?? now())
                 : null;
@@ -59,5 +66,11 @@ final class UpdateTaskStatusAction
 
             return $task->refresh();
         });
+
+        if ($actor !== null && $previousStatus !== $status) {
+            TaskStatusChanged::dispatch($task, $previousStatus, $status, $actor);
+        }
+
+        return $task;
     }
 }

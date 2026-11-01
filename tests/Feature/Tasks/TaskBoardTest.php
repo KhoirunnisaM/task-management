@@ -67,6 +67,66 @@ class TaskBoardTest extends TestCase
             ->assertForbidden();
     }
 
+    public function test_board_renders_the_four_workflow_columns_in_order(): void
+    {
+        $this->actingAs($this->member)
+            ->get(route('projects.tasks.board', $this->project))
+            ->assertOk()
+            ->assertSeeInOrder([
+                TaskStatus::Todo->label(),
+                TaskStatus::InProgress->label(),
+                TaskStatus::InReview->label(),
+                TaskStatus::Completed->label(),
+            ]);
+    }
+
+    public function test_board_card_shows_the_expected_task_metadata_and_scopes_tasks_to_the_project(): void
+    {
+        $task = $this->task(
+            $this->member,
+            priority: TaskPriority::High,
+            due: today()->addDay(),
+            title: 'Kartu dengan metadata',
+        );
+
+        $foreignProject = Project::factory()->active()->create();
+        $foreignTask = Task::factory()->for($foreignProject)->create(['title' => 'Task proyek lain']);
+
+        $this->actingAs($this->member)
+            ->get(route('projects.tasks.board', $this->project))
+            ->assertOk()
+            ->assertSee('TSK-'.$task->id)
+            ->assertSee('Kartu dengan metadata')
+            ->assertSee(__('tasks.due_tomorrow_label'))
+            ->assertSee('Prioritas Tinggi')
+            ->assertDontSee($foreignTask->title);
+    }
+
+    public function test_move_task_rejects_a_negative_position(): void
+    {
+        $task = $this->task($this->member, title: 'Task dengan posisi tidak valid');
+
+        Livewire::actingAs($this->manager)
+            ->test(Board::class, ['project' => $this->project])
+            ->call('moveTask', $task->id, TaskStatus::InProgress->value, -1)
+            ->assertHasErrors('position');
+
+        $this->assertSame(TaskStatus::Todo, $task->fresh()->status);
+    }
+
+    public function test_admin_can_move_any_task_in_the_project(): void
+    {
+        $task = $this->task($this->otherMember, title: 'Task anggota lain');
+
+        Livewire::actingAs($this->admin)
+            ->test(Board::class, ['project' => $this->project])
+            ->call('moveTask', $task->id, TaskStatus::InReview->value, 0)
+            ->assertHasNoErrors();
+
+        $this->assertSame(TaskStatus::InReview, $task->fresh()->status);
+        $this->assertSame(0, $task->fresh()->position);
+    }
+
     public function test_manager_can_move_a_task_between_columns_with_position(): void
     {
         $existing = $this->task($this->manager, TaskStatus::InProgress, position: 0, title: 'Sudah dikerjakan');

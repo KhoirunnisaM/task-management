@@ -94,7 +94,12 @@ class Board extends Component
 
         $this->authorize('updateStatus', $task);
 
-        $action->execute($task, TaskStatus::from($validated['status']), (int) $validated['position']);
+        $action->execute(
+            $task,
+            TaskStatus::from($validated['status']),
+            (int) $validated['position'],
+            auth()->user(),
+        );
 
         unset($this->columns);
     }
@@ -113,7 +118,11 @@ class Board extends Component
 
         $this->authorize('updateStatus', $task);
 
-        $action->execute($task, TaskStatus::from($validated['status']));
+        $action->execute(
+            $task,
+            TaskStatus::from($validated['status']),
+            actor: auth()->user(),
+        );
 
         unset($this->columns);
     }
