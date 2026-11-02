@@ -3,11 +3,7 @@
 @section('title', __('tasks.index_title'))
 
 @section('content')
-    <div class="mb-4">
-        <a href="{{ route('projects.show', $project) }}" class="text-sm font-medium text-content-muted transition-colors duration-150 hover:text-content">
-            {{ $project->title }}
-        </a>
-    </div>
+    <x-ui.back-button :fallback="route('projects.show', $project)" class="mb-4" />
 
     <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
@@ -49,46 +45,46 @@
 
             <div>
                 <label for="status" class="sr-only">{{ __('tasks.status_field') }}</label>
-                <select id="status" name="status" class="h-9 w-full rounded-control border border-line bg-surface px-3 text-sm text-content">
+                <x-ui.select id="status" name="status">
                     <option value="">{{ __('tasks.all_status') }}</option>
                     @foreach (App\Enums\TaskStatus::cases() as $status)
                         <option value="{{ $status->value }}" @selected(($filters['status'] ?? '') === $status->value)>{{ $status->label() }}</option>
                     @endforeach
-                </select>
+                </x-ui.select>
             </div>
 
             <div>
                 <label for="priority" class="sr-only">{{ __('tasks.priority_label') }}</label>
-                <select id="priority" name="priority" class="h-9 w-full rounded-control border border-line bg-surface px-3 text-sm text-content">
+                <x-ui.select id="priority" name="priority">
                     <option value="">{{ __('tasks.all_priority') }}</option>
                     @foreach (App\Enums\TaskPriority::cases() as $priority)
                         <option value="{{ $priority->value }}" @selected(($filters['priority'] ?? '') === $priority->value)>{{ $priority->label() }}</option>
                     @endforeach
-                </select>
+                </x-ui.select>
             </div>
 
             <div>
                 <label for="assignee" class="sr-only">{{ __('tasks.assignee') }}</label>
-                <select id="assignee" name="assignee" class="h-9 w-full rounded-control border border-line bg-surface px-3 text-sm text-content">
+                <x-ui.select id="assignee" name="assignee">
                     <option value="">{{ __('tasks.all_assignee') }}</option>
                     <option value="unassigned" @selected(($filters['assignee'] ?? '') === 'unassigned')>{{ __('tasks.unassigned') }}</option>
                     @foreach ($project->members->sortBy('name') as $member)
                         <option value="{{ $member->id }}" @selected((string) ($filters['assignee'] ?? '') === (string) $member->id)>{{ $member->name }}</option>
                     @endforeach
-                </select>
+                </x-ui.select>
             </div>
         </div>
 
         <div class="mt-2 flex flex-wrap items-center gap-2">
             <div>
                 <label for="due" class="sr-only">{{ __('tasks.due_date') }}</label>
-                <select id="due" name="due" class="h-9 rounded-control border border-line bg-surface px-3 text-sm text-content">
+                <x-ui.select id="due" name="due">
                     <option value="">{{ __('tasks.all_due') }}</option>
                     <option value="overdue" @selected(($filters['due'] ?? '') === 'overdue')>{{ __('tasks.due_overdue') }}</option>
                     <option value="today" @selected(($filters['due'] ?? '') === 'today')>{{ __('tasks.due_today') }}</option>
                     <option value="week" @selected(($filters['due'] ?? '') === 'week')>{{ __('tasks.due_week') }}</option>
                     <option value="none" @selected(($filters['due'] ?? '') === 'none')>{{ __('tasks.due_none') }}</option>
-                </select>
+                </x-ui.select>
             </div>
 
             <x-ui.button type="submit" variant="secondary">{{ __('common.search') }}</x-ui.button>
@@ -117,17 +113,24 @@
                 'in_review' => 'bg-status-in-review',
                 'completed' => 'bg-status-completed',
             ];
+
+            $edges = [
+                'todo' => 'border-t-status-todo',
+                'in_progress' => 'border-t-status-in-progress',
+                'in_review' => 'border-t-status-in-review',
+                'completed' => 'border-t-status-completed',
+            ];
         @endphp
 
         <div class="mt-6 space-y-5">
             @foreach (App\Enums\TaskStatus::cases() as $status)
                 @php($group = $tasksByStatus->get($status->value, collect()))
 
-                <section class="rounded-card border border-line bg-surface">
+                <section class="rounded-card border border-t-[3px] border-line bg-surface {{ $edges[$status->value] }}">
                     <header class="flex items-center gap-2 border-b border-line px-4 py-3">
                         <span class="size-2 rounded-full {{ $dots[$status->value] }}" aria-hidden="true"></span>
                         <h2 class="text-sm font-semibold">{{ $status->label() }}</h2>
-                        <span class="text-xs tabular-nums text-content-muted">{{ $group->count() }}</span>
+                        <span class="inline-flex min-w-6 items-center justify-center rounded-full bg-canvas px-1.5 py-0.5 text-[11px] font-semibold tabular-nums text-content-muted">{{ $group->count() }}</span>
                     </header>
 
                     @if ($group->isEmpty())

@@ -3,11 +3,7 @@
 @section('title', __('tasks.board_title'))
 
 @section('content')
-    <div class="mb-4">
-        <a href="{{ route('projects.show', $project) }}" class="text-sm font-medium text-content-muted transition-colors duration-150 hover:text-content">
-            {{ $project->title }}
-        </a>
-    </div>
+    <x-ui.back-button :fallback="route('projects.show', $project)" class="mb-4" />
 
     <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>

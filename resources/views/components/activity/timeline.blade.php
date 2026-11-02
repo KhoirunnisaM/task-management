@@ -1,4 +1,4 @@
-@props(['logs', 'emptyTitle' => null, 'emptyBody' => null])
+@props(['logs', 'emptyTitle' => null, 'emptyBody' => null, 'showProject' => false])
 
 @if ($logs->isEmpty())
     <x-ui.empty-state
@@ -20,6 +20,10 @@
                             <span class="font-medium">“{{ $log->subjectTitle() }}”</span>
                         @endif
                     </p>
+
+                    @if ($showProject && $log->project)
+                        <p class="mt-1 truncate text-xs font-medium text-content-muted">{{ $log->project->title }}</p>
+                    @endif
 
                     @if ($log->hasChange())
                         <p class="mt-1 flex flex-wrap items-center gap-1.5 text-xs text-content-muted">

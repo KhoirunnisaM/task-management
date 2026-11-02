@@ -20,7 +20,7 @@
     ];
 
     $classes = [
-        'inline-flex items-center justify-center gap-2 rounded-control text-sm font-medium transition-colors duration-150 disabled:pointer-events-none disabled:opacity-50',
+        'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-control text-sm font-medium transition-colors duration-150 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
         $variants[$variant] ?? $variants['primary'],
         $sizes[$size] ?? $sizes['md'],
     ];

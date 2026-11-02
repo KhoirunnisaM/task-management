@@ -21,7 +21,7 @@ class AuthenticationTest extends TestCase
         $this->get(route('login'))
             ->assertOk()
             ->assertSee(__('auth.login_title'))
-            ->assertSee('admin@taskmanager.test');
+            ->assertSee(route('register'), false);
     }
 
     public function test_user_can_log_in_and_log_out(): void

@@ -1,11 +1,14 @@
 <?php
 
+use App\Http\Controllers\AdminMemberController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectMemberController;
 use App\Http\Controllers\TaskController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/dashboard');
@@ -13,12 +16,22 @@ Route::redirect('/', '/dashboard');
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'create'])->name('login');
     Route::post('/login', [LoginController::class, 'store']);
+
+    Route::get('/register', [RegisterController::class, 'create'])->name('register');
+    Route::post('/register', [RegisterController::class, 'store']);
 });
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
+
+    Route::middleware('can:viewAny,'.User::class)->group(function () {
+        Route::get('admin/members', [AdminMemberController::class, 'index'])
+            ->name('admin.members.index');
+        Route::get('admin/members/{user}', [AdminMemberController::class, 'show'])
+            ->name('admin.members.show');
+    });
 
     Route::resource('projects', ProjectController::class);
 

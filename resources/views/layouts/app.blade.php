@@ -4,8 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="theme-color" content="#3347C8">
 
     <title>@yield('title', __('common.app_name')) · {{ __('common.app_name') }}</title>
+
+    <link rel="icon" type="image/svg+xml" href="{{ asset('images/taskflow-icon.svg') }}">
+    <link rel="alternate icon" href="{{ asset('favicon.ico') }}">
 
     @include('layouts.partials.theme-script')
 

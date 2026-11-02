@@ -5,6 +5,13 @@
         'in_review' => 'bg-status-in-review',
         'completed' => 'bg-status-completed',
     ];
+
+    $edges = [
+        'todo' => 'border-t-status-todo',
+        'in_progress' => 'border-t-status-in-progress',
+        'in_review' => 'border-t-status-in-review',
+        'completed' => 'border-t-status-completed',
+    ];
 @endphp
 
 <div>
@@ -27,46 +34,43 @@
 
             <div>
                 <label for="board-assignee" class="sr-only">{{ __('tasks.assignee') }}</label>
-                <select
+                <x-ui.select
                     id="board-assignee"
                     wire:model.live="assignee"
-                    class="h-9 w-full rounded-control border border-line bg-surface px-3 text-sm text-content"
                 >
                     <option value="">{{ __('tasks.all_assignee') }}</option>
                     <option value="unassigned">{{ __('tasks.unassigned') }}</option>
                     @foreach ($this->members as $member)
                         <option value="{{ $member->id }}">{{ $member->name }}</option>
                     @endforeach
-                </select>
+                </x-ui.select>
             </div>
 
             <div>
                 <label for="board-priority" class="sr-only">{{ __('tasks.priority_label') }}</label>
-                <select
+                <x-ui.select
                     id="board-priority"
                     wire:model.live="priority"
-                    class="h-9 w-full rounded-control border border-line bg-surface px-3 text-sm text-content"
                 >
                     <option value="">{{ __('tasks.all_priority') }}</option>
                     @foreach (App\Enums\TaskPriority::cases() as $option)
                         <option value="{{ $option->value }}">{{ $option->label() }}</option>
                     @endforeach
-                </select>
+                </x-ui.select>
             </div>
 
             <div>
                 <label for="board-due" class="sr-only">{{ __('tasks.due_date') }}</label>
-                <select
+                <x-ui.select
                     id="board-due"
                     wire:model.live="due"
-                    class="h-9 w-full rounded-control border border-line bg-surface px-3 text-sm text-content"
                 >
                     <option value="">{{ __('tasks.all_due') }}</option>
                     <option value="overdue">{{ __('tasks.due_overdue') }}</option>
                     <option value="today">{{ __('tasks.due_today') }}</option>
                     <option value="week">{{ __('tasks.due_week') }}</option>
                     <option value="none">{{ __('tasks.due_none') }}</option>
-                </select>
+                </x-ui.select>
             </div>
         </div>
 
@@ -92,12 +96,12 @@
 
                 <section
                     wire:key="board-column-{{ $status->value }}"
-                    class="w-[304px] max-w-[calc(100vw-2rem)] shrink-0 snap-start rounded-card border border-line bg-canvas p-2 lg:w-auto lg:max-w-none"
+                    class="w-[304px] max-w-[calc(100vw-2rem)] shrink-0 snap-start rounded-card border border-t-[3px] border-line bg-canvas p-2 lg:w-auto lg:max-w-none {{ $edges[$status->value] }}"
                 >
                     <header class="flex items-center gap-2 px-1 py-1.5">
                         <span class="size-2 rounded-full {{ $dots[$status->value] }}" aria-hidden="true"></span>
                         <h2 class="text-sm font-semibold">{{ $status->label() }}</h2>
-                        <span class="text-xs tabular-nums text-content-muted">{{ $group->count() }}</span>
+                        <span class="inline-flex min-w-6 items-center justify-center rounded-full bg-surface px-1.5 py-0.5 text-[11px] font-semibold tabular-nums text-content-muted">{{ $group->count() }}</span>
 
                         @can('create', [App\Models\Task::class, $project])
                             <a

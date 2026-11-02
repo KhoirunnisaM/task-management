@@ -4,11 +4,7 @@
 
 @section('content')
     <div x-data="{ tab: '{{ $errors->any() ? 'members' : 'overview' }}' }">
-        <div class="mb-4">
-            <a href="{{ route('projects.index') }}" class="text-sm font-medium text-content-muted hover:text-content">
-                {{ __('common.back') }}
-            </a>
-        </div>
+        <x-ui.back-button :fallback="route('projects.index')" class="mb-4" />
 
         <header class="rounded-card border border-line bg-surface p-5 sm:p-6">
             <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -17,7 +13,31 @@
                         <h1 class="text-3xl font-bold tracking-tight">{{ $project->title }}</h1>
                         <x-ui.status-badge :status="$project->status" />
                     </div>
-                    <p class="mt-1.5 text-sm text-content-muted">{{ $project->owner->name }}</p>
+
+                    <div class="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-content-muted">
+                        <span class="inline-flex items-center gap-1.5">
+                            <x-ui.avatar :user="$project->owner" size="sm" />
+                            {{ $project->owner->name }}
+                        </span>
+
+                        @if ($project->start_date || $project->end_date)
+                            <span class="inline-flex items-center gap-1.5">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="size-3.5" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                                </svg>
+                                {{ $project->start_date?->translatedFormat('d M Y') ?? __('common.not_set') }}
+                                <span aria-hidden="true">–</span>
+                                {{ $project->end_date?->translatedFormat('d M Y') ?? __('common.not_set') }}
+                            </span>
+                        @endif
+
+                        <span class="inline-flex items-center gap-1.5">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="size-3.5" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+                            </svg>
+                            {{ __('projects.member_count', ['count' => $project->members->count()]) }}
+                        </span>
+                    </div>
                 </div>
 
                 <div class="flex shrink-0 items-center gap-2">
@@ -183,16 +203,16 @@
                                                 @csrf
                                                 @method('PATCH')
                                                 <label for="role-{{ $member->id }}" class="sr-only">{{ __('members.role') }}</label>
-                                                <select
+                                                <x-ui.select
                                                     id="role-{{ $member->id }}"
                                                     name="role"
-                                                    class="h-8 rounded-control border border-line bg-surface px-2 text-xs text-content"
+                                                    class="h-8 w-auto px-2 text-xs"
                                                     onchange="this.form.submit()"
                                                 >
                                                     @foreach (App\Enums\ProjectRole::cases() as $role)
                                                         <option value="{{ $role->value }}" @selected($member->pivot->role === $role)>{{ $role->label() }}</option>
                                                     @endforeach
-                                                </select>
+                                                </x-ui.select>
                                                 <noscript>
                                                     <x-ui.button type="submit" variant="secondary" size="sm">{{ __('common.save') }}</x-ui.button>
                                                 </noscript>
@@ -232,21 +252,12 @@
                                 <form method="POST" action="{{ route('projects.members.store', $project) }}" class="mt-4 space-y-3">
                                     @csrf
                                     <x-ui.form-field :label="__('members.select_user')" name="user_id">
-                                        <select
-                                            id="user_id"
-                                            name="user_id"
-                                            required
-                                            @class([
-                                                'h-9 w-full rounded-control border bg-surface px-3 text-sm text-content',
-                                                'border-danger' => $errors->has('user_id'),
-                                                'border-line' => ! $errors->has('user_id'),
-                                            ])
-                                        >
+                                        <x-ui.select id="user_id" name="user_id" required>
                                             <option value="">{{ __('members.select_user_placeholder') }}</option>
                                             @foreach ($eligibleMembers as $eligibleMember)
                                                 <option value="{{ $eligibleMember->id }}">{{ $eligibleMember->name }} — {{ $eligibleMember->email }}</option>
                                             @endforeach
-                                        </select>
+                                        </x-ui.select>
                                     </x-ui.form-field>
 
                                     <x-ui.button type="submit" class="w-full">{{ __('members.add') }}</x-ui.button>

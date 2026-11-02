@@ -8,6 +8,10 @@ return [
     'max' => [
         'string' => ':attribute maksimal :max karakter.',
     ],
+    'min' => [
+        'string' => ':attribute minimal :min karakter.',
+    ],
+    'confirmed' => 'Konfirmasi :attribute tidak cocok.',
     'date' => ':attribute harus berupa tanggal yang valid.',
     'after_or_equal' => ':attribute harus sama dengan atau setelah :date.',
     'unique' => ':attribute sudah digunakan.',
@@ -20,8 +24,10 @@ return [
         'status' => 'status',
         'start_date' => 'tanggal mulai',
         'end_date' => 'tanggal selesai',
+        'name' => 'nama',
         'email' => 'email',
         'password' => 'password',
+        'password_confirmation' => 'konfirmasi password',
         'user_id' => 'pengguna',
         'role' => 'peran',
     ],

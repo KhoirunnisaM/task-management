@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 272 72" role="img" aria-labelledby="taskflowLogoTitle">
+    <title id="taskflowLogoTitle">TaskFlow — Plan, Organize, Achieve</title>
+    <defs>
+        <linearGradient id="taskflowLogoGradient" x1="8" y1="4" x2="58" y2="60" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#4A5CE0" />
+            <stop offset="1" stop-color="#283AA3" />
+        </linearGradient>
+    </defs>
+    <g transform="translate(0 4)">
+        <rect width="64" height="64" rx="16" fill="url(#taskflowLogoGradient)" />
+        <rect x="15" y="15" width="34" height="34" rx="8" fill="#FFFFFF" />
+        <path d="M22.5 25.25l2.15 2.15 4.1-4.4" fill="none" stroke="#3347C8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M33 25.25h9" fill="none" stroke="#3347C8" stroke-width="2.4" stroke-linecap="round" />
+        <path d="M22.5 32.25l2.15 2.15 4.1-4.4" fill="none" stroke="#3347C8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M33 32.25h9" fill="none" stroke="#3347C8" stroke-width="2.4" stroke-linecap="round" />
+        <path d="M22.5 39.25l2.15 2.15 4.1-4.4" fill="none" stroke="#3347C8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M33 39.25h9" fill="none" stroke="#3347C8" stroke-width="2.4" stroke-linecap="round" />
+    </g>
+    <text x="80" y="40" font-family="'Plus Jakarta Sans', 'Segoe UI', Arial, sans-serif" font-size="30" font-weight="700" letter-spacing="-0.8">
+        <tspan fill="#172033">Task</tspan><tspan fill="#3347C8">Flow</tspan>
+    </text>
+    <text x="81" y="57" font-family="'Plus Jakarta Sans', 'Segoe UI', Arial, sans-serif" font-size="8.5" font-weight="600" letter-spacing="2.2" fill="#5F6B82">PLAN &#8226; ORGANIZE &#8226; ACHIEVE</text>
+</svg>

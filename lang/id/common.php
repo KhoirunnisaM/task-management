@@ -1,7 +1,12 @@
 <?php
 
 return [
-    'app_name' => 'Task Manager',
+    'app_name' => 'TaskFlow',
+    'tagline' => 'Plan • Organize • Achieve',
+    'app_description' => 'Kelola proyek, atur alur kerja, dan capai target bersama tim.',
+    'workspace' => 'Ruang kerja',
+    'user_management' => 'Pengelolaan pengguna',
+    'all_members' => 'Semua anggota',
     'save' => 'Simpan perubahan',
     'cancel' => 'Batal',
     'delete' => 'Hapus',
